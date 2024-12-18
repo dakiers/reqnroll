@@ -1,4 +1,5 @@
-﻿using SpecFlow.Internal.Json;
+﻿using System;
+using SpecFlow.Internal.Json;
 
 [Binding]
 public class LivingDocHook
@@ -44,10 +45,11 @@ public class LivingDocHook
     public void AfterStep(ScenarioContext scenario, OutputHelper outputHelper)
     {
         var step = scenario.StepContext;
+        var error = step.TestError ?? scenario.TestError;
         _result!.StepResults.Add(new(
             (DateTime.UtcNow - _stepStartTime!).Value,
             step.Status,
-            step.TestError?.Message,
+            error?.Message,
             outputHelper.FlushOutputs(OutputLocation.AfterStep)));
     }
 
